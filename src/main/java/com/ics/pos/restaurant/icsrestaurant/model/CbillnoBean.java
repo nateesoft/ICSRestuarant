@@ -1,0 +1,72 @@
+package com.ics.pos.restaurant.icsrestaurant.model;
+
+import java.time.LocalDate;
+
+
+public class CbillnoBean {
+
+    private String bRefno;
+    private Float bCupondiscamt;
+    private String bOntime;
+    private LocalDate bOndate;
+    private LocalDate bPostdate;
+    private String bTable;
+    private String bMacno;
+    private String bCashier;
+    private Integer bCust;
+    private String bEtd;
+    private Float bTotal;
+    private Float bFood;
+    private Float bDrink;
+    private Float bProduct;
+    private Float bService;
+    private Float bServiceamt;
+    private Float bItemdiscamt;
+    private String bFastdisc;
+    private Float bFastdiscamt;
+    private String bEmpdisc;
+    private Float bEmpdiscamt;
+    private String bTraindisc;
+    private Float bTraindiscamt;
+    private String bMemdisc;
+    private Float bMemdiscamt;
+    private String bSubdisc;
+    private Float bSubdiscamt;
+    private Float bSubdiscbath;
+    private Float bProdiscamt;
+    private Float bSpadiscamt;
+    private Float bAdjamt;
+    private Float bNettotal;
+    private Float bNetfood;
+    private Float bNetdrink;
+    private Float bNetproduct;
+    private Float bNetvat;
+    private Float bNetnonvat;
+    private Float bVat;
+    private Float bPayamt;
+    private Float bCash;
+    private Float bGiftvoucher;
+    private Float bEarnest;
+    private Float bTon;
+    private String bCrcode1;
+    private String bCardno1;
+    private String bAppcode1;
+    private Float bCrcharge1;
+    private Float bCrchargeamt1;
+    private Float bCramt1;
+    private String bAccrcode;
+    private Float bAccramt;
+    private Integer bAccrcr;
+    private String bMemcode;
+    private String bMemname;
+    private LocalDate bMembegin;
+    private LocalDate bMemend;
+    private Float bMemcursum;
+    private String bVoid;
+    private String bVoiduser;
+    private String bVoidtime;
+    private Integer bBillcopy;
+    private Integer bPrncnt;
+    private String bPrntime1;
+    private String bPrntime2;
+}
