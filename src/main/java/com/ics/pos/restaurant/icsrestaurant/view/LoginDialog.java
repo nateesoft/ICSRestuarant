@@ -4,13 +4,21 @@
  */
 package com.ics.pos.restaurant.icsrestaurant.view;
 
+import com.ics.pos.restaurant.icsrestaurant.connect.DatabaseConnection;
+import com.ics.pos.restaurant.icsrestaurant.controller.LoginController;
+import com.ics.pos.restaurant.icsrestaurant.dto.LoginRequestDto;
+import com.ics.pos.restaurant.icsrestaurant.dto.LoginResponseDto;
+import com.ics.pos.restaurant.icsrestaurant.utils.AlertModalPopup;
+import java.util.logging.Level;
+
 /**
  *
  * @author nateelive
  */
 public class LoginDialog extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginDialog.class.getName());
+    private final LoginController loginController = new LoginController();
 
     /**
      * Creates new form LoginDialog
@@ -31,7 +39,7 @@ public class LoginDialog extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         btnLogin = new javax.swing.JButton();
-        txtUserName = new javax.swing.JTextField();
+        txtUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -94,7 +102,7 @@ public class LoginDialog extends javax.swing.JDialog {
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtUserName)
+                            .addComponent(txtUsername)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(28, Short.MAX_VALUE))
@@ -107,7 +115,7 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -173,6 +181,14 @@ public class LoginDialog extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
+                if (!DatabaseConnection.isConnected()) {
+                    DatabaseConnection.connect();
+                }
+                if (DatabaseConnection.getConnection() == null) {
+                    logger.log(Level.SEVERE, "Cannot get database connection");
+                    return;
+                }
+                
                 LoginDialog dialog = new LoginDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
@@ -194,18 +210,38 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUserName;
+    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
     private void cancelApp() {
+        DatabaseConnection.disconnect();
         System.exit(0);
     }
 
     private void loginApp() {
-        /* if login success */
-        FloorPlanFrame floorPlanDialog = new FloorPlanFrame();
-        floorPlanDialog.setVisible(true);
-        
-        this.dispose();
+        String username = txtUsername.getText().trim();
+        char[] passwordChars = txtPassword.getPassword();
+        String password = new String(passwordChars);
+        java.util.Arrays.fill(passwordChars, '\0');
+
+        if (username.isEmpty() || password.isEmpty()) {
+            AlertModalPopup.showWarning(this, "กรุณาระบุข้อมูล", "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
+            return;
+        }
+
+        LoginRequestDto loginDto = new LoginRequestDto();
+        loginDto.setUsername(username);
+        loginDto.setPassword(password);
+
+        LoginResponseDto response = loginController.validateLogin(loginDto);
+        if (response != null) {
+            logger.log(Level.INFO, "Login success: {0}", username);
+            FloorPlanFrame floorPlanDialog = new FloorPlanFrame();
+            floorPlanDialog.setVisible(true);
+            this.dispose();
+        } else {
+            logger.log(Level.WARNING, "Login failed for user: {0}", username);
+            AlertModalPopup.showError(this, "เข้าสู่ระบบไม่สำเร็จ", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+        }
     }
 }

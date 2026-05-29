@@ -1,10 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.ics.pos.restaurant.icsrestaurant.view;
-
-import com.ics.pos.restaurant.icsrestaurant.view.POSFrame;
 
 /**
  *
@@ -21,6 +15,7 @@ public class FloorPlanFrame extends javax.swing.JFrame {
         initComponents();
         
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
     }
 
     /**
@@ -136,9 +131,10 @@ public class FloorPlanFrame extends javax.swing.JFrame {
         jButton100 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Floor Plan");
 
         jPanel1.setLayout(new java.awt.GridLayout(10, 10));
@@ -248,6 +244,11 @@ public class FloorPlanFrame extends javax.swing.JFrame {
         jTabbedPane1.addTab("tab1", jPanel1);
 
         jMenu1.setText("File");
+
+        jMenuItem1.setText("Logout");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -273,6 +274,10 @@ public class FloorPlanFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         openPOS();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        logoutApp();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -378,6 +383,7 @@ public class FloorPlanFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
@@ -387,5 +393,12 @@ public class FloorPlanFrame extends javax.swing.JFrame {
         posFrame.setVisible(true);
         
         this.dispose();
+    }
+
+    private void logoutApp() {
+        this.dispose();
+        
+        LoginDialog loginDialog = new LoginDialog(null, true);
+        loginDialog.setVisible(true);
     }
 }
